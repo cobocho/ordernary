@@ -6,6 +6,7 @@ import { AuthService } from './services/auth-service';
 import { GoogleProvider } from './providers/google-provider';
 import { JwtService } from './services/jwt-service';
 import ms from 'ms';
+import { StateService } from './services/state-service';
 
 interface Env {
 	GOOGLE_CLIENT_ID: string;
@@ -16,11 +17,16 @@ interface Env {
 	JWT_ACCESS_TOKEN_EXPIRES_IN: string;
 	JWT_REFRESH_TOKEN_EXPIRES_IN: string;
 	USER_DB: D1Database;
+	CONSOLE_ORIGIN: string;
+	APP_ORIGIN: string;
+	STATE_SECRET: string;
+	STATE_ISSUER: string;
 }
 
 class UserServiceWorker extends WorkerEntrypoint<Env> {
 	private authService: AuthService;
 	private jwtService: JwtService;
+	private stateService: StateService;
 	private db = drizzle(this.env.USER_DB);
 
 	constructor(ctx: ExecutionContext, env: Env) {
@@ -39,7 +45,18 @@ class UserServiceWorker extends WorkerEntrypoint<Env> {
 			this.env.GOOGLE_REDIRECT_URI,
 		);
 
-		this.authService = new AuthService(googleClient, this.db, this.jwtService);
+		this.stateService = new StateService(
+			this.env.STATE_SECRET,
+			this.env.STATE_ISSUER,
+		);
+
+		this.authService = new AuthService(
+			googleClient,
+			this.db,
+			this.jwtService,
+			this.stateService,
+			[this.env.CONSOLE_ORIGIN, this.env.APP_ORIGIN],
+		);
 	}
 
 	async fetch() {
@@ -50,12 +67,23 @@ class UserServiceWorker extends WorkerEntrypoint<Env> {
 		});
 	}
 
-	async getAuthUrl(provider: ProviderType) {
-		return this.authService.getAuthUrl(provider);
+	async getAuthUrl(
+		provider: ProviderType,
+		client: 'console' | 'app',
+		returnTo: string,
+	) {
+		return this.authService.getAuthUrl(provider, client, returnTo, {
+			console: this.env.CONSOLE_ORIGIN,
+			app: this.env.APP_ORIGIN,
+		});
 	}
 
-	async loginOrSignup(provider: ProviderType, code: string) {
-		return this.authService.loginOrSignup(provider, code);
+	async handleCallback(
+		provider: ProviderType,
+		code: string,
+		stateToken: string,
+	) {
+		return this.authService.handleCallback(provider, code, stateToken);
 	}
 
 	async logout(userId: string) {

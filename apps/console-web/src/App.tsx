@@ -2,7 +2,11 @@ import { trpc } from './iib/trpc';
 
 function App() {
 	const handleLogin = async () => {
-		const authUrl = await trpc.user.getAuthUrl.query({ provider: 'google' });
+		const authUrl = await trpc.user.getAuthUrl.query({
+			provider: 'google',
+			client: 'console',
+			returnTo: '/',
+		});
 
 		if (authUrl) {
 			window.location.href = authUrl;

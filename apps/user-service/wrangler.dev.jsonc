@@ -15,4 +15,8 @@
 			"experimental_remote": true,
 		},
 	],
+	"vars": {
+		"CONSOLE_ORIGIN": "http://localhost:5173",
+		"APP_ORIGIN": "http://localhost:6174",
+	},
 }

@@ -4,6 +4,7 @@ import { ProviderType, User, users } from '../db/schema';
 import { eq } from 'drizzle-orm';
 import { GoogleProvider } from '../providers/google-provider';
 import { JwtService } from './jwt-service';
+import { StateService } from './state-service';
 
 export interface AuthResponse {
 	user: User;
@@ -21,14 +22,62 @@ export class AuthService {
 		private readonly google: GoogleProvider,
 		private readonly db: DrizzleD1Database,
 		private readonly jwtService: JwtService,
+		private readonly stateService: StateService, // 주입
+		private readonly allowOrigins: string[], // allowlist
 	) {}
 
 	/**
 	 * OAuth 인증 URL 생성
 	 */
-	async getAuthUrl(provider: ProviderType): Promise<string> {
+	async getAuthUrl(
+		provider: ProviderType,
+		client: 'console' | 'app',
+		returnTo: string,
+		origins: { console: string; app: string },
+	): Promise<string> {
 		const oAuthProvider = this.getProvider(provider);
-		return oAuthProvider.getAuthUrl();
+
+		const origin = client === 'console' ? origins.console : origins.app;
+		if (!this.isAllowedOrigin(origin)) throw new Error('Invalid origin config');
+
+		const state = await this.stateService.sign({
+			client,
+			origin,
+			returnTo: this.sanitizeReturnTo(returnTo),
+		});
+
+		return oAuthProvider.getAuthUrl(state);
+	}
+
+	private isAllowedOrigin(origin: string) {
+		try {
+			const o = new URL(origin).origin;
+			return this.allowOrigins.includes(o);
+		} catch {
+			return false;
+		}
+	}
+
+	async handleCallback(
+		provider: ProviderType,
+		code: string,
+		stateToken: string,
+	): Promise<{ auth: AuthResponse; redirectTo: string }> {
+		const parsed = await this.stateService.verify(stateToken);
+
+		if (!parsed) throw new Error('Invalid state');
+
+		const { origin, returnTo } = parsed;
+
+		if (!this.isAllowedOrigin(origin)) {
+			throw new Error('Origin not allowed');
+		}
+
+		const auth = await this.loginOrSignup(provider, code);
+		const safePath = this.sanitizeReturnTo(returnTo);
+		const redirectTo = new URL(safePath, origin).toString();
+
+		return { auth, redirectTo };
 	}
 
 	/**
@@ -39,7 +88,7 @@ export class AuthService {
 		code: string,
 	): Promise<AuthResponse> {
 		const oAuthProvider = this.getProvider(provider);
-		const userInfo = await oAuthProvider.getUserInfo(code);
+		const userInfo = await oAuthProvider.getUserInfoByCode(code);
 
 		const { isExist, user } = await this.checkIsExistUser(userInfo.id);
 
@@ -48,6 +97,11 @@ export class AuthService {
 		}
 
 		return this.handleExistingUser(provider, user);
+	}
+
+	// 안전한 경로만 허용
+	private sanitizeReturnTo(path: string) {
+		return typeof path === 'string' && path.startsWith('/') ? path : '/';
 	}
 
 	/**
