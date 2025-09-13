@@ -7,16 +7,12 @@
 	"observability": {
 		"enabled": true,
 	},
-	"env": {
-		"dev": {
-			"d1_databases": [
-				{
-					"binding": "USER_DB",
-					"database_name": "user-db",
-					"database_id": "6091b375-7607-46db-8618-73fba015b0d6",
-					"experimental_remote": true,
-				},
-			],
+	"d1_databases": [
+		{
+			"binding": "USER_DB",
+			"database_name": "user-db",
+			"database_id": "6091b375-7607-46db-8618-73fba015b0d6",
+			"experimental_remote": true,
 		},
-	},
+	],
 }

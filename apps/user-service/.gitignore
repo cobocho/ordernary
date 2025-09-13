@@ -165,3 +165,6 @@ dist
 .env*
 !.env.example
 .wrangler/
+
+drizzle.config.ts
+drizzle.config.dev.ts
