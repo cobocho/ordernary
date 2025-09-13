@@ -2,8 +2,9 @@
 	"name": "client-gateway",
 	"type": "module",
 	"scripts": {
-		"dev": "wrangler dev  --x-remote-bindings --port 3000",
-		"deploy": "wrangler deploy --minify"
+		"dev": "wrangler dev  --x-remote-bindings --port 3000 --config wrangler.dev.jsonc",
+		"deploy": "wrangler deploy --config wrangler.jsonc --minify",
+		"deploy:dev": "wrangler deploy --config wrangler.dev.jsonc --minify"
 	},
 	"dependencies": {
 		"@hono/trpc-server": "^0.4.0",

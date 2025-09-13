@@ -15,7 +15,7 @@ export const userRouter = router({
 
 export const callbackRouter = new Hono<{ Bindings: Env }>();
 
-callbackRouter.get('/auth/callback/google', async (c) => {
+callbackRouter.get('/google', async (c) => {
 	const code = c.req.query('code');
 
 	if (!code) {

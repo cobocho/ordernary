@@ -1,6 +1,6 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "worker-user-service",
+	"name": "worker-user-service-dev",
 	"main": "src/index.ts",
 	"compatibility_date": "2025-06-17",
 	"compatibility_flags": ["nodejs_compat"],
