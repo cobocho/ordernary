@@ -1,17 +1,17 @@
-import { Hono } from 'hono';
-import { publicProcedure, router } from '../../lib/trpc';
-import { Env } from '../../types/binding';
+import { publicProcedure } from '../../lib/trpc';
 import { userGetAuthUrlSchema } from './user.model';
+import { router } from '../../lib/trpc';
+import { Hono } from 'hono';
+import { Env } from '../../types/binding';
 
-export const userRouter = {
+export const userRouter = router({
 	getAuthUrl: publicProcedure
 		.input(userGetAuthUrlSchema)
 		.query(async ({ input, ctx }) => {
 			const authUrl = await ctx.env.USER_SERVICE.getAuthUrl(input.provider);
-
 			return authUrl;
 		}),
-};
+});
 
 export const callbackRouter = new Hono<{ Bindings: Env }>();
 

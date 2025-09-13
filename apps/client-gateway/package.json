@@ -1,16 +1,16 @@
 {
-  "name": "client-gateway",
-  "type": "module",
-  "scripts": {
-    "dev": "wrangler dev  --x-remote-bindings --port 3000",
-    "deploy": "wrangler deploy --minify"
-  },
-  "dependencies": {
-    "@hono/trpc-server": "^0.4.0",
-    "hono": "^4.9.7",
-    "zod": "^4.1.8"
-  },
-  "devDependencies": {
-    "wrangler": "4.35.0"
-  }
+	"name": "client-gateway",
+	"type": "module",
+	"scripts": {
+		"dev": "wrangler dev  --x-remote-bindings --port 3000",
+		"deploy": "wrangler deploy --minify"
+	},
+	"dependencies": {
+		"@hono/trpc-server": "^0.4.0",
+		"hono": "^4.9.7",
+		"zod": "^4.1.8"
+	},
+	"devDependencies": {
+		"wrangler": "4.35.0"
+	}
 }
