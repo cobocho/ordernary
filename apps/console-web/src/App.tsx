@@ -1,4 +1,4 @@
-import { trpc } from './iib/trpc';
+import { trpc } from './lib/trpc';
 
 function App() {
 	const handleLogin = async () => {
