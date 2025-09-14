@@ -63,6 +63,7 @@ export class AuthService {
 		code: string,
 		stateToken: string,
 	): Promise<{ auth: AuthResponse; redirectTo: string }> {
+		console.log('handleCallback', provider, code, stateToken);
 		const parsed = await this.stateService.verify(stateToken);
 
 		if (!parsed) throw new Error('Invalid state');

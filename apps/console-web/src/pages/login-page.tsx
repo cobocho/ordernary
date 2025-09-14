@@ -15,7 +15,7 @@ export function LoginPage() {
 	};
 
 	const handleTest = async () => {
-		const test = await trpc.test.getTest.query();
+		const test = await trpc.hello.query();
 		console.log(test);
 	};
 

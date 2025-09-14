@@ -16,7 +16,6 @@ export const userRouter = router({
 				input.provider,
 				input.client,
 				input.returnTo,
-				ㅎ,
 			);
 			return authUrl;
 		}),
@@ -36,6 +35,8 @@ callbackRouter.get('/google', async (c) => {
 	}
 
 	const result = await c.env.USER_SERVICE.handleCallback('google', code, state);
+
+	console.log(result);
 
 	setCookie(c, JwtService.accessTokenCookieName, result.auth.accessToken, {
 		path: '/',

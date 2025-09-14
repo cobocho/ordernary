@@ -1,12 +1,14 @@
-import { Context, Hono, HonoRequest } from 'hono';
-import { initTRPC } from '@trpc/server';
+import { Hono } from 'hono';
 import { callbackRouter, userRouter } from '@/router/user/user.router';
 import { workspaceRouter } from '@/router/workspace/workspace.router';
 import { trpcServer } from '@hono/trpc-server';
 import { cors } from 'hono/cors';
 import { Env, HonoContext } from '@/types/binding';
 import { getCookie } from 'hono/cookie';
-import { JwtService } from '../../../packages/services/src/jwt-service';
+import { JwtService } from '@ordernary/jwt-service';
+import ms from 'ms';
+import { CustomError } from './errors/erros';
+import { router, protectedProcedure } from '@/lib/trpc';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -32,26 +34,13 @@ app.get('/', (c) => {
 	});
 });
 
-export const t = initTRPC.context<HonoContext>().create();
-
-const contextCheck = t.middleware(async ({ ctx, next }) => {
-	return next({ ctx: { ...ctx } });
-});
-
-export const protectedProcedure = t.procedure.use(contextCheck);
-
-export const router = t.router;
-
-export const publicProcedure = t.procedure;
-
 export const appRouter = router({
 	user: userRouter,
 	workspace: workspaceRouter,
-	test: router({
-		getTest: protectedProcedure.query(async ({ ctx }) => {
-			console.log(ctx.cookies);
-			return { message: 'Hello, world!' };
-		}),
+	hello: protectedProcedure.query(({ ctx }) => {
+		return {
+			message: 'Hello, world!',
+		};
 	}),
 });
 
@@ -61,24 +50,22 @@ app.use(
 	'/trpc/*',
 	trpcServer({
 		router: appRouter,
-		createContext: (opts, c) => {
-			const accessToken = getCookie(c, JwtService.accessTokenCookieName);
-			const refreshToken = getCookie(c, JwtService.refreshTokenCookieName);
-
-			const context: Omit<HonoContext, 'env'> = {
+		createContext: (_, c) => {
+			return {
+				env: c.env,
 				cookies: {
-					accessToken: accessToken ?? '',
-					refreshToken: refreshToken ?? '',
+					accessToken: getCookie(c, JwtService.accessTokenCookieName) ?? '',
+					refreshToken: getCookie(c, JwtService.refreshTokenCookieName) ?? '',
 				},
-			};
-
-			return context;
+				JWT_SERVICE: new JwtService(
+					c.env.JWT_SECRET,
+					c.env.JWT_ISSUER,
+					c.env.JWT_ACCESS_TOKEN_EXPIRES_IN as ms.StringValue,
+					c.env.JWT_REFRESH_TOKEN_EXPIRES_IN as ms.StringValue,
+				),
+			} satisfies HonoContext;
 		},
 	}),
 );
-
-app.onError((err, c) => {
-	return c.json({ error: 'Internal Server Error', message: err.message }, 500);
-});
 
 export default app;

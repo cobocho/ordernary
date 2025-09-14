@@ -1,5 +1,6 @@
 import { UserServiceWorkerEntrypoint } from '@ordernary/user-service/types';
 import { WorkspaceServiceWorkerEntrypoint } from '@ordernary/workspace-service/types';
+import { JwtService } from '@ordernary/jwt-service';
 
 export type Env = {
 	USER_SERVICE: Service<UserServiceWorkerEntrypoint>;
@@ -12,6 +13,7 @@ export type Env = {
 
 export type HonoContext = {
 	env: Env;
+	JWT_SERVICE: JwtService;
 	cookies: {
 		accessToken: string;
 		refreshToken: string;

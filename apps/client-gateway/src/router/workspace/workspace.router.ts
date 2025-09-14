@@ -1,4 +1,4 @@
-import { publicProcedure, router } from '@/lib/trpc';
+import { publicProcedure, protectedProcedure, router } from '@/lib/trpc';
 import {
 	createWorkspaceSchema,
 	updateWorkspaceSchema,
@@ -12,7 +12,7 @@ import {
 } from './workspace.model';
 
 export const workspaceRouter = router({
-	create: publicProcedure
+	create: protectedProcedure
 		.input(createWorkspaceSchema)
 		.mutation(async ({ input, ctx }) => {
 			// TODO: Get userId from auth context
@@ -29,7 +29,7 @@ export const workspaceRouter = router({
 			return ctx.env.WORKSPACE_SERVICE.getWorkspace(input.workspaceId);
 		}),
 
-	getUserWorkspaces: publicProcedure.query(async ({ ctx }) => {
+	getUserWorkspaces: protectedProcedure.query(async ({ ctx }) => {
 		// TODO: Get userId from auth context
 		const userId = 'temp-user-id';
 		return ctx.env.WORKSPACE_SERVICE.getUserWorkspaces(userId);
