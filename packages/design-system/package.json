@@ -1,20 +1,24 @@
 {
-	"name": "@ordernary/design-system",
-	"version": "0.0.0",
-	"type": "module",
-	"private": true,
-	"main": "./src/index.ts",
-	"exports": {
-		".": "./src/index.ts",
-		"./styles.css": "./src/styles/globals.css"
-	},
-	"dependencies": {
-		"@radix-ui/react-slot": "^1.2.2",
-		"class-variance-authority": "^0.7.1",
-		"clsx": "^2.1.1",
-		"lucide-react": "^0.507.0",
-		"tailwind": "^4.0.0",
-		"tailwind-merge": "^3.2.0",
-		"tw-animate-css": "^1.2.9"
-	}
+  "name": "@ordernary/design-system",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./styles.css": "./src/styles/globals.css"
+  },
+  "dependencies": {
+    "@radix-ui/react-collapsible": "^1.1.12",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-separator": "^1.1.7",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-tooltip": "^1.2.8",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.544.0",
+    "tailwind": "^4.0.0",
+    "tailwind-merge": "^3.2.0",
+    "tw-animate-css": "^1.2.9"
+  }
 }

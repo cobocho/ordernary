@@ -1,7 +1,7 @@
 import { Button } from '@ordernary/design-system';
-import { trpc } from './lib/trpc';
+import { trpc } from '../lib/trpc';
 
-function App() {
+export function LoginPage() {
 	const handleLogin = async () => {
 		const authUrl = await trpc.user.getAuthUrl.query({
 			provider: 'google',
@@ -14,11 +14,5 @@ function App() {
 		}
 	};
 
-	return (
-		<>
-			<Button onClick={handleLogin}>구글 로그인</Button>
-		</>
-	);
+	return <Button onClick={handleLogin}>구글 로그인</Button>;
 }
-
-export default App;
