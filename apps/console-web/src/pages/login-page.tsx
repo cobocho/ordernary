@@ -14,5 +14,15 @@ export function LoginPage() {
 		}
 	};
 
-	return <Button onClick={handleLogin}>구글 로그인</Button>;
+	const handleTest = async () => {
+		const test = await trpc.test.getTest.query();
+		console.log(test);
+	};
+
+	return (
+		<div>
+			<Button onClick={handleLogin}>구글 로그인</Button>
+			<Button onClick={handleTest}>테스트</Button>
+		</div>
+	);
 }

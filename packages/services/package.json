@@ -1,0 +1,14 @@
+{
+  "name": "@ordernary/jwt-service",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2",
+    "ms": "^2.1.3"
+  }
+}

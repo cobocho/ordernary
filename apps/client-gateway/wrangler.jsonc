@@ -3,6 +3,7 @@
 	"name": "client-gateway",
 	"main": "src/index.ts",
 	"compatibility_date": "2025-06-17",
+	"compatibility_flags": ["nodejs_compat"],
 	"services": [
 		{
 			"binding": "USER_SERVICE",

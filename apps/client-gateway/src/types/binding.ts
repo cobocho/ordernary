@@ -6,8 +6,14 @@ export type Env = {
 	WORKSPACE_SERVICE: Service<WorkspaceServiceWorkerEntrypoint>;
 	JWT_ACCESS_TOKEN_EXPIRES_IN: string;
 	JWT_REFRESH_TOKEN_EXPIRES_IN: string;
+	JWT_SECRET: string;
+	JWT_ISSUER: string;
 };
 
 export type HonoContext = {
 	env: Env;
+	cookies: {
+		accessToken: string;
+		refreshToken: string;
+	};
 };

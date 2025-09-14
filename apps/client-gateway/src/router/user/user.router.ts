@@ -5,15 +5,18 @@ import { Hono } from 'hono';
 import { Env } from '@/types/binding';
 import { setCookie } from 'hono/cookie';
 import { durToSeconds } from '@/lib/ms';
+import { JwtService } from '@ordernary/jwt-service';
 
 export const userRouter = router({
 	getAuthUrl: publicProcedure
 		.input(userGetAuthUrlSchema)
 		.query(async ({ input, ctx }) => {
+			console.log(ctx.cookies);
 			const authUrl = await ctx.env.USER_SERVICE.getAuthUrl(
 				input.provider,
 				input.client,
 				input.returnTo,
+				ㅎ,
 			);
 			return authUrl;
 		}),
@@ -34,7 +37,7 @@ callbackRouter.get('/google', async (c) => {
 
 	const result = await c.env.USER_SERVICE.handleCallback('google', code, state);
 
-	setCookie(c, 'accessToken', result.auth.accessToken, {
+	setCookie(c, JwtService.accessTokenCookieName, result.auth.accessToken, {
 		path: '/',
 		httpOnly: true,
 		secure: true,
@@ -42,7 +45,7 @@ callbackRouter.get('/google', async (c) => {
 		maxAge: durToSeconds(c.env.JWT_ACCESS_TOKEN_EXPIRES_IN),
 	});
 
-	setCookie(c, 'refreshToken', result.auth.refreshToken, {
+	setCookie(c, JwtService.refreshTokenCookieName, result.auth.refreshToken, {
 		path: '/',
 		httpOnly: true,
 		secure: true,

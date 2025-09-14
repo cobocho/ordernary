@@ -11,6 +11,9 @@ export interface JwtPayload {
 }
 
 export class JwtService {
+	static readonly accessTokenCookieName = 'access_token';
+	static readonly refreshTokenCookieName = 'refresh_token';
+
 	constructor(
 		private readonly secret: string,
 		private readonly issuer: string,
