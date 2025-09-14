@@ -1,7 +1,7 @@
-import UserServiceWorker from '../../../user-service/src';
+import { UserServiceWorkerEntrypoint } from '@ordernary/user-service/types';
 
 export type Env = {
-	USER_SERVICE: Service<typeof UserServiceWorker>;
+	USER_SERVICE: Service<UserServiceWorkerEntrypoint>;
 	JWT_ACCESS_TOKEN_EXPIRES_IN: string;
 	JWT_REFRESH_TOKEN_EXPIRES_IN: string;
 };

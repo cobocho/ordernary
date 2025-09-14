@@ -22,7 +22,7 @@ export const router = t.router;
 
 export const publicProcedure = t.procedure;
 
-const appRouter = router({
+export const appRouter = router({
 	user: userRouter,
 });
 
@@ -37,7 +37,5 @@ app.use(
 		router: appRouter,
 	}),
 );
-
-export type AppRouter = typeof appRouter;
 
 export default app;
