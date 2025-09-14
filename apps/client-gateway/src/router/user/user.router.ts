@@ -1,10 +1,10 @@
-import { publicProcedure } from '../../lib/trpc';
-import { userGetAuthUrlSchema } from './user.model';
-import { router } from '../../lib/trpc';
+import { publicProcedure } from '@/lib/trpc';
+import { userGetAuthUrlSchema } from '@/router/user/user.model';
+import { router } from '@/lib/trpc';
 import { Hono } from 'hono';
-import { Env } from '../../types/binding';
+import { Env } from '@/types/binding';
 import { setCookie } from 'hono/cookie';
-import { durToSeconds } from '../../lib/ms';
+import { durToSeconds } from '@/lib/ms';
 
 export const userRouter = router({
 	getAuthUrl: publicProcedure

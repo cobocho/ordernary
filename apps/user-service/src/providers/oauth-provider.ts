@@ -1,4 +1,4 @@
-import { ProviderType } from '../db/schema';
+import { ProviderType } from '@/db/schema';
 
 export interface UserInfo {
 	id: string;

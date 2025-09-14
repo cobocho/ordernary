@@ -1,14 +1,9 @@
 import { Hono } from 'hono';
 import { initTRPC } from '@trpc/server';
-import UserServiceWorker from '../../user-service/src';
-import { callbackRouter, userRouter } from './router/user/user.router';
+import { callbackRouter, userRouter } from '@/router/user/user.router';
 import { trpcServer } from '@hono/trpc-server';
 import { cors } from 'hono/cors';
-import { HonoContext } from './types/binding';
-
-interface Env {
-	USER_SERVICE: Service<typeof UserServiceWorker>;
-}
+import { Env, HonoContext } from '@/types/binding';
 
 const app = new Hono<{ Bindings: Env }>();
 
