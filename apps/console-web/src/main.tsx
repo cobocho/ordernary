@@ -3,12 +3,13 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import { router } from './router';
 import { RouterProvider } from 'react-router-dom';
-import { SidebarProvider } from '@ordernary/design-system';
+import { queryClient } from './lib/query-client';
+import { QueryClientProvider } from '@tanstack/react-query';
 
 createRoot(document.getElementById('root')!).render(
 	<StrictMode>
-		<SidebarProvider>
+		<QueryClientProvider client={queryClient}>
 			<RouterProvider router={router} />
-		</SidebarProvider>
+		</QueryClientProvider>
 	</StrictMode>,
 );

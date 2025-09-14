@@ -53,13 +53,13 @@ export function NavMain({
 										<item.icon
 											className={cn(
 												'scale-150',
-												item.isActive && 'text-red-500',
+												item.isActive ? 'text-neutral-900' : 'text-neutral-500',
 											)}
 										/>
 									)}
 									<span
 										className={cn(
-											'font-bold ml-2 text-neutral-700',
+											'font-bold ml-2 text-neutral-500',
 											item.isActive && 'text-black',
 										)}
 									>
@@ -68,14 +68,17 @@ export function NavMain({
 									<ChevronRight className="transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
 								</SidebarMenuButton>
 							</CollapsibleTrigger>
-							<CollapsibleContent>
+							<CollapsibleContent className="py-2">
 								<SidebarMenuSub>
 									{item.items?.map((subItem) => (
-										<SidebarMenuSubItem key={subItem.title}>
+										<SidebarMenuSubItem
+											key={subItem.title}
+											className="py-1.5"
+										>
 											<SidebarMenuSubButton asChild>
 												<a
 													href={subItem.url}
-													className="font-medium"
+													className="font-medium text-neutral-500"
 												>
 													<span>{subItem.title}</span>
 												</a>
