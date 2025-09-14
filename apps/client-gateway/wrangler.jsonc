@@ -1,0 +1,12 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "client-gateway",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-06-17",
+	"services": [
+		{
+			"binding": "USER_SERVICE",
+			"service": "worker-user-service",
+		},
+	],
+}

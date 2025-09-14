@@ -1,0 +1,22 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "worker-user-service-dev",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-06-17",
+	"compatibility_flags": ["nodejs_compat"],
+	"observability": {
+		"enabled": true,
+	},
+	"d1_databases": [
+		{
+			"binding": "USER_DB",
+			"database_name": "user-db",
+			"database_id": "6091b375-7607-46db-8618-73fba015b0d6",
+			"experimental_remote": true,
+		},
+	],
+	"vars": {
+		"CONSOLE_ORIGIN": "http://localhost:5173",
+		"APP_ORIGIN": "http://localhost:6174",
+	},
+}
