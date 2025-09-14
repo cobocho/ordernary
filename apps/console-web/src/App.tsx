@@ -1,3 +1,4 @@
+import { Button } from '@ordernary/design-system';
 import { trpc } from './lib/trpc';
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
 
 	return (
 		<>
-			<button onClick={handleLogin}>구글 로그인</button>
+			<Button onClick={handleLogin}>구글 로그인</Button>
 		</>
 	);
 }
