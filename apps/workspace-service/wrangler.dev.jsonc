@@ -1,0 +1,22 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "worker-workspace-service-dev",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-06-17",
+	"compatibility_flags": ["nodejs_compat"],
+	"observability": {
+		"enabled": true,
+	},
+	"d1_databases": [
+		{
+			"binding": "WORKSPACE_DB",
+			"database_name": "workspace-db",
+			"database_id": "36933260-a062-4f6f-b9fd-d62ef7933b86",
+			"experimental_remote": true,
+		},
+	],
+	"vars": {
+		"CONSOLE_ORIGIN": "http://localhost:5173",
+		"APP_ORIGIN": "http://localhost:6174",
+	},
+}

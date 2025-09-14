@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { initTRPC } from '@trpc/server';
 import { callbackRouter, userRouter } from '@/router/user/user.router';
+import { workspaceRouter } from '@/router/workspace/workspace.router';
 import { trpcServer } from '@hono/trpc-server';
 import { cors } from 'hono/cors';
 import { Env, HonoContext } from '@/types/binding';
@@ -19,6 +20,7 @@ export const publicProcedure = t.procedure;
 
 export const appRouter = router({
 	user: userRouter,
+	workspace: workspaceRouter,
 });
 
 app.route('/auth/callback', callbackRouter);

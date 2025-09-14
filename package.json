@@ -1,28 +1,31 @@
 {
-  "name": "ordernary",
-  "private": true,
-  "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
-  },
-  "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250913.0",
-    "prettier": "^3.6.2",
-    "turbo": "^2.5.6",
-    "typescript": "5.9.2"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "packageManager": "bun@1.1.12",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "dependencies": {
-    "@trpc/client": "^11.5.1"
-  }
+	"name": "ordernary",
+	"private": true,
+	"scripts": {
+		"build": "turbo run build",
+		"dev": "turbo run dev",
+		"dev:worker": "turbo run dev --filter=@ordernary/user-service --filter=@ordernary/workspace-service",
+		"dev:gateway": "turbo run dev --filter=@ordernary/client-gateway",
+		"dev:server": "turbo run dev --filter=@ordernary/user-service --filter=@ordernary/workspace-service --filter=@ordernary/client-gateway",
+		"lint": "turbo run lint",
+		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
+		"check-types": "turbo run check-types"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20250913.0",
+		"prettier": "^3.6.2",
+		"turbo": "^2.5.6",
+		"typescript": "5.9.2"
+	},
+	"engines": {
+		"node": ">=18"
+	},
+	"packageManager": "bun@1.1.12",
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	],
+	"dependencies": {
+		"@trpc/client": "^11.5.1"
+	}
 }

@@ -1,12 +1,12 @@
 {
-	"name": "@ordernary/user-service",
+	"name": "@ordernary/workspace-service",
 	"version": "0.0.0",
 	"private": true,
 	"exports": {
 		"./types": "./src/types.ts"
 	},
 	"scripts": {
-		"dev": "wrangler dev --x-remote-bindings --config wrangler.dev.jsonc --port 4000 --inspector-port 4001",
+		"dev": "wrangler dev --x-remote-bindings --config wrangler.dev.jsonc --port 4100 --inspector-port 4101",
 		"deploy": "wrangler deploy --config wrangler.jsonc",
 		"deploy:dev": "wrangler deploy --config wrangler.dev.jsonc",
 		"db:generate": "drizzle-kit generate",
@@ -17,12 +17,9 @@
 		"typescript": "^5.5.2"
 	},
 	"dependencies": {
-		"@types/jsonwebtoken": "^9.0.10",
 		"drizzle-kit": "^0.31.4",
 		"drizzle-orm": "^0.44.5",
-		"googleapis": "^159.0.0",
-		"jose": "^6.1.0",
-		"jsonwebtoken": "^9.0.2",
+		"nanoid": "^5.0.9",
 		"wrangler": "4.35.0"
 	}
 }

@@ -5,7 +5,7 @@
 		"./types": "./src/types.ts"
 	},
 	"scripts": {
-		"dev": "wrangler dev  --x-remote-bindings --port 3000 --config wrangler.dev.jsonc",
+		"dev": "wrangler dev --port 3000 --config wrangler.dev.jsonc",
 		"deploy": "wrangler deploy --config wrangler.jsonc --minify",
 		"deploy:dev": "wrangler deploy --config wrangler.dev.jsonc --minify"
 	},
@@ -16,6 +16,7 @@
 	},
 	"devDependencies": {
 		"wrangler": "4.35.0",
-		"@ordernary/user-service": "workspace:*"
+		"@ordernary/user-service": "workspace:*",
+		"@ordernary/workspace-service": "workspace:*"
 	}
 }

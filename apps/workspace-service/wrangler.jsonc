@@ -1,0 +1,21 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "worker-workspace-service",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-06-17",
+	"compatibility_flags": ["nodejs_compat"],
+	"observability": {
+		"enabled": true,
+	},
+	"d1_databases": [
+		{
+			"binding": "WORKSPACE_DB",
+			"database_name": "workspace-db",
+			"database_id": "9246285e-95c1-4d2b-9fad-a4a91ddb6c22",
+		},
+	],
+	"vars": {
+		"CONSOLE_ORIGIN": "https://console.ordernary.app",
+		"APP_ORIGIN": "https://app.ordernary.app",
+	},
+}

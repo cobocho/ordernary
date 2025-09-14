@@ -8,5 +8,9 @@
 			"binding": "USER_SERVICE",
 			"service": "worker-user-service-dev",
 		},
+		{
+			"binding": "WORKSPACE_SERVICE",
+			"service": "worker-workspace-service-dev",
+		},
 	],
 }
