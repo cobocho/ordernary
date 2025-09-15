@@ -1,15 +1,19 @@
-import { publicProcedure } from '@/lib/trpc';
-import { userGetAuthUrlSchema } from '@/router/user/user.model';
-import { router } from '@/lib/trpc';
+import { publicProcedure } from '../../lib/trpc';
+import {
+	userGetAuthUrlRequestSchema,
+	userGetAuthUrlResponseSchema,
+} from './user.model';
+import { router } from '../../lib/trpc';
 import { Hono } from 'hono';
-import { Env } from '@/types/binding';
+import { Env } from '../../types/binding';
 import { setCookie } from 'hono/cookie';
-import { durToSeconds } from '@/lib/ms';
+import { durToSeconds } from '../../lib/ms';
 import { JwtService } from '@ordernary/jwt-service';
 
 export const userRouter = router({
 	getAuthUrl: publicProcedure
-		.input(userGetAuthUrlSchema)
+		.input(userGetAuthUrlRequestSchema)
+		.output(userGetAuthUrlResponseSchema)
 		.query(async ({ input, ctx }) => {
 			console.log(ctx.cookies);
 			const authUrl = await ctx.env.USER_SERVICE.getAuthUrl(
@@ -17,7 +21,7 @@ export const userRouter = router({
 				input.client,
 				input.returnTo,
 			);
-			return authUrl;
+			return { authUrl };
 		}),
 });
 

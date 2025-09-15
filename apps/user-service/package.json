@@ -2,9 +2,6 @@
 	"name": "@ordernary/user-service",
 	"version": "0.0.0",
 	"private": true,
-	"exports": {
-		"./types": "./src/types.ts"
-	},
 	"scripts": {
 		"dev": "wrangler dev --x-remote-bindings --config wrangler.dev.jsonc --port 4000 --inspector-port 4001",
 		"deploy": "wrangler deploy --config wrangler.jsonc",

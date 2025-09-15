@@ -1,14 +1,12 @@
 import { Hono } from 'hono';
-import { callbackRouter, userRouter } from '@/router/user/user.router';
-import { workspaceRouter } from '@/router/workspace/workspace.router';
+import { callbackRouter, userRouter } from './router/user/user.router';
 import { trpcServer } from '@hono/trpc-server';
 import { cors } from 'hono/cors';
-import { Env, HonoContext } from '@/types/binding';
+import { Env, HonoContext } from './types/binding';
 import { getCookie } from 'hono/cookie';
 import { JwtService } from '@ordernary/jwt-service';
 import ms from 'ms';
-import { CustomError } from './errors/erros';
-import { router, protectedProcedure } from '@/lib/trpc';
+import { router, protectedProcedure } from './lib/trpc';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -36,13 +34,14 @@ app.get('/', (c) => {
 
 export const appRouter = router({
 	user: userRouter,
-	workspace: workspaceRouter,
 	hello: protectedProcedure.query(({ ctx }) => {
 		return {
 			message: 'Hello, world!',
 		};
 	}),
 });
+
+export type AppRouter = typeof appRouter;
 
 app.route('/auth/callback', callbackRouter);
 

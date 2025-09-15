@@ -1,6 +1,6 @@
 import { WorkerEntrypoint } from 'cloudflare:workers';
 import { drizzle } from 'drizzle-orm/d1';
-import { WorkspaceService } from '@/services/store-service';
+import { StoreService } from './services/store-service';
 
 interface Env {
 	STORE_DB: D1Database;
@@ -13,6 +13,7 @@ class StoreServiceWorker extends WorkerEntrypoint<Env> {
 
 	constructor(ctx: ExecutionContext, env: Env) {
 		super(ctx, env);
+		this.storeService = new StoreService(this.db);
 	}
 
 	async fetch() {
@@ -24,15 +25,15 @@ class StoreServiceWorker extends WorkerEntrypoint<Env> {
 	}
 
 	async createStore(storeName: string, createdBy: string) {
-		return this.storeService.createStore(storeName, createdBy);
+		// return this.storeService.createStore(storeName, createdBy);
 	}
 
 	async getStore(storeId: string) {
-		return this.storeService.getStore(storeId);
+		// return this.storeService.getStore(storeId);
 	}
 
 	async getUsersStores(userId: string) {
-		return this.storeService.getUsersStores(userId);
+		// return this.storeService.getUsersStores(userId);
 	}
 }
 

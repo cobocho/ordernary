@@ -1,10 +1,10 @@
 import { DrizzleD1Database } from 'drizzle-orm/d1';
-import { OAuthProvider } from '@/providers/oauth-provider';
-import { ProviderType, User, users } from '@/db/schema';
+import { OAuthProvider } from '../providers/oauth-provider';
+import { ProviderType, User, users } from '../db/schema';
 import { eq } from 'drizzle-orm';
-import { GoogleProvider } from '@/providers/google-provider';
+import { GoogleProvider } from '../providers/google-provider';
 import { JwtService } from '@ordernary/jwt-service';
-import { StateService } from '@/services/state-service';
+import { StateService } from '../services/state-service';
 
 export interface AuthResponse {
 	user: User;

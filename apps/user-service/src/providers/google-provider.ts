@@ -1,4 +1,4 @@
-import { OAuthProvider, UserInfo } from '@/providers/oauth-provider';
+import { OAuthProvider, UserInfo } from '../providers/oauth-provider';
 import { google } from 'googleapis';
 
 export class GoogleProvider implements OAuthProvider {

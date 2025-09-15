@@ -1,11 +1,11 @@
 import { WorkerEntrypoint } from 'cloudflare:workers';
 import { drizzle } from 'drizzle-orm/d1';
-import { AuthService } from '@/services/auth-service';
-import { GoogleProvider } from '@/providers/google-provider';
+import { AuthService } from './services/auth-service';
+import { GoogleProvider } from './providers/google-provider';
 import { JwtService } from '@ordernary/jwt-service';
 import ms from 'ms';
-import { StateService } from '@/services/state-service';
-import { ProviderType } from '@/db/schema';
+import { StateService } from './services/state-service';
+import { ProviderType } from './db/schema';
 
 interface Env {
 	GOOGLE_CLIENT_ID: string;

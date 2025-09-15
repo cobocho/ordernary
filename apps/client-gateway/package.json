@@ -1,9 +1,6 @@
 {
 	"name": "@ordernary/client-gateway",
 	"type": "module",
-	"exports": {
-		"./types": "./src/types.ts"
-	},
 	"scripts": {
 		"dev": "wrangler dev --port 3000 --config wrangler.dev.jsonc",
 		"deploy": "wrangler deploy --config wrangler.jsonc --minify",
@@ -15,8 +12,6 @@
 		"zod": "^4.1.8"
 	},
 	"devDependencies": {
-		"wrangler": "4.35.0",
-		"@ordernary/user-service": "workspace:*",
-		"@ordernary/workspace-service": "workspace:*"
+		"wrangler": "4.35.0"
 	}
 }
