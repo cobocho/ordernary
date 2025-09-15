@@ -4,9 +4,9 @@
 	"scripts": {
 		"build": "turbo run build",
 		"dev": "turbo run dev",
-		"dev:worker": "turbo run dev --filter=@ordernary/user-service --filter=@ordernary/workspace-service",
+		"dev:worker": "turbo run dev --filter=@ordernary/user-service --filter=@ordernary/store-service",
 		"dev:gateway": "turbo run dev --filter=@ordernary/client-gateway",
-		"dev:server": "turbo run dev --filter=@ordernary/user-service --filter=@ordernary/workspace-service --filter=@ordernary/client-gateway",
+		"dev:server": "turbo run dev --filter=@ordernary/user-service --filter=@ordernary/store-service --filter=@ordernary/client-gateway",
 		"lint": "turbo run lint",
 		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
 		"check-types": "turbo run check-types"
