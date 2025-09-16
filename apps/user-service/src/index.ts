@@ -6,6 +6,7 @@ import { JwtService } from '@ordernary/jwt-service';
 import ms from 'ms';
 import { StateService } from './services/state-service';
 import { ProviderType } from './db/schema';
+import { UserService } from './services/user-service';
 
 interface Env {
 	GOOGLE_CLIENT_ID: string;
@@ -24,8 +25,13 @@ interface Env {
 
 class UserServiceWorker extends WorkerEntrypoint<Env> {
 	private authService: AuthService;
+
+	private userService: UserService;
+
 	private jwtService: JwtService;
+
 	private stateService: StateService;
+
 	private db = drizzle(this.env.USER_DB);
 
 	constructor(ctx: ExecutionContext, env: Env) {
@@ -56,6 +62,8 @@ class UserServiceWorker extends WorkerEntrypoint<Env> {
 			this.stateService,
 			[this.env.CONSOLE_ORIGIN, this.env.APP_ORIGIN],
 		);
+
+		this.userService = new UserService(this.db, this.jwtService);
 	}
 
 	async fetch() {
@@ -83,6 +91,10 @@ class UserServiceWorker extends WorkerEntrypoint<Env> {
 		stateToken: string,
 	) {
 		return this.authService.handleCallback(provider, code, stateToken);
+	}
+
+	async getProfile(accessToken: string) {
+		return this.userService.getCurrentUser(accessToken);
 	}
 
 	async logout(userId: string) {

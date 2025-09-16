@@ -1,10 +1,11 @@
 import { DrizzleD1Database } from 'drizzle-orm/d1';
 import { OAuthProvider } from '../providers/oauth-provider';
-import { ProviderType, User, users } from '../db/schema';
+import { ProviderType, User, UserInsert, users } from '../db/schema';
 import { eq } from 'drizzle-orm';
 import { GoogleProvider } from '../providers/google-provider';
 import { JwtService } from '@ordernary/jwt-service';
 import { StateService } from '../services/state-service';
+import { generateUlid } from '@ordernary/server-utils';
 
 export interface AuthResponse {
 	user: User;
@@ -62,8 +63,7 @@ export class AuthService {
 		provider: ProviderType,
 		code: string,
 		stateToken: string,
-	): Promise<{ auth: AuthResponse; redirectTo: string }> {
-		console.log('handleCallback', provider, code, stateToken);
+	) {
 		const parsed = await this.stateService.verify(stateToken);
 
 		if (!parsed) throw new Error('Invalid state');
@@ -84,20 +84,30 @@ export class AuthService {
 	/**
 	 * OAuth 코드로 로그인/회원가입 처리
 	 */
-	async loginOrSignup(
-		provider: ProviderType,
-		code: string,
-	): Promise<AuthResponse> {
+	async loginOrSignup(provider: ProviderType, code: string) {
 		const oAuthProvider = this.getProvider(provider);
 		const userInfo = await oAuthProvider.getUserInfoByCode(code);
 
 		const { isExist, user } = await this.checkIsExistUser(userInfo.id);
 
 		if (!isExist) {
-			return this.handleNewUser(provider, userInfo);
+			return this.handleNewUser(provider, {
+				providerId: userInfo.id,
+				name: userInfo.name,
+				email: userInfo.email,
+				phone: userInfo.phone,
+				avatarUrl: userInfo.avatarUrl,
+				provider: provider,
+				state: 'active',
+			});
 		}
 
-		return this.handleExistingUser(provider, user);
+		return this.handleExistingUser(provider, {
+			userId: user.userId,
+			providerId: user.providerId,
+			email: user.email,
+			name: user.name,
+		});
 	}
 
 	// 안전한 경로만 허용
@@ -110,15 +120,17 @@ export class AuthService {
 	 */
 	private async handleNewUser(
 		provider: ProviderType,
-		userInfo: { id: string; name: string; email: string; avatarUrl: string },
-	): Promise<AuthResponse> {
-		const userId = crypto.randomUUID();
+		userInfo: Omit<UserInsert, 'userId'>,
+	) {
+		const userId = generateUlid();
 
 		const tokenPayload = {
 			userId,
 			provider,
-			providerId: userInfo.id,
+			providerId: userInfo.providerId,
 			email: userInfo.email,
+			phone: userInfo.phone,
+			avatarUrl: userInfo.avatarUrl,
 			name: userInfo.name,
 		};
 
@@ -131,15 +143,8 @@ export class AuthService {
 			.insert(users)
 			.values({
 				userId,
-				provider,
-				providerId: userInfo.id,
-				name: userInfo.name,
-				state: 'active',
-				email: userInfo.email,
-				avatarUrl: userInfo.avatarUrl,
+				...userInfo,
 				refreshToken,
-				createdAt: Date.now(),
-				updatedAt: Date.now(),
 			})
 			.returning();
 
@@ -155,8 +160,13 @@ export class AuthService {
 	 */
 	private async handleExistingUser(
 		provider: ProviderType,
-		user: any,
-	): Promise<AuthResponse> {
+		user: {
+			userId: string;
+			providerId: string;
+			email: string;
+			name: string;
+		},
+	) {
 		const tokenPayload = {
 			userId: user.userId,
 			provider,
@@ -165,22 +175,15 @@ export class AuthService {
 			name: user.name,
 		};
 
-		let refreshToken = user.refreshToken;
+		const refreshToken = this.jwtService.generateRefreshToken(tokenPayload);
 
-		if (
-			!refreshToken ||
-			!this.jwtService.verifyToken(refreshToken, 'refresh')
-		) {
-			refreshToken = this.jwtService.generateRefreshToken(tokenPayload);
-
-			await this.db
-				.update(users)
-				.set({
-					refreshToken,
-					updatedAt: Date.now(),
-				})
-				.where(eq(users.userId, user.userId));
-		}
+		await this.db
+			.update(users)
+			.set({
+				refreshToken,
+				updatedAt: Date.now(),
+			})
+			.where(eq(users.userId, user.userId));
 
 		const accessToken = this.jwtService.generateAccessToken(tokenPayload);
 
@@ -194,9 +197,7 @@ export class AuthService {
 	/**
 	 * 사용자 존재 여부 확인
 	 */
-	async checkIsExistUser(
-		providerId: string,
-	): Promise<{ isExist: boolean; user: any | null }> {
+	async checkIsExistUser(providerId: string) {
 		const result = await this.db
 			.select()
 			.from(users)
@@ -205,13 +206,13 @@ export class AuthService {
 
 		if (result.length > 0) {
 			return {
-				isExist: true,
+				isExist: true as const,
 				user: result[0],
 			};
 		}
 
 		return {
-			isExist: false,
+			isExist: false as const,
 			user: null,
 		};
 	}
@@ -274,28 +275,6 @@ export class AuthService {
 				updatedAt: Date.now(),
 			})
 			.where(eq(users.userId, userId));
-	}
-
-	/**
-	 * Access Token으로 사용자 정보 조회
-	 */
-	async getCurrentUser(accessToken: string): Promise<any> {
-		const payload = this.jwtService.verifyToken(accessToken, 'access');
-		if (!payload) {
-			throw new Error('Invalid access token');
-		}
-
-		const result = await this.db
-			.select()
-			.from(users)
-			.where(eq(users.userId, payload.userId))
-			.limit(1);
-
-		if (result.length === 0) {
-			throw new Error('User not found');
-		}
-
-		return result[0];
 	}
 
 	async logoutAllDevices(userId: string): Promise<void> {

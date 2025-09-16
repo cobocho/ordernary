@@ -95,18 +95,21 @@ export const storeUpdateSchema = storeInsertSchema.extend({
 
 export type StoreUpdate = z.infer<typeof storeUpdateSchema>;
 
-export const storeMembers = sqliteTable('store_members', {
-	storeId: text('store_id')
-		.notNull()
-		.primaryKey()
-		.references(() => stores.storeId),
-	userId: text('user_id').notNull().primaryKey(),
-	role: text('role', { enum: STORE_ROLES }).notNull().default('viewer'),
-	status: text('status', { enum: STORE_MEMBER_STATUSES }).notNull(),
-	joinedAt: integer('joined_at')
-		.notNull()
-		.default(sql`(strftime('%s','now'))`),
-});
+export const storeMembers = sqliteTable(
+	'store_members',
+	{
+		storeId: text('store_id')
+			.notNull()
+			.references(() => stores.storeId),
+		userId: text('user_id').notNull(),
+		role: text('role', { enum: STORE_ROLES }).notNull().default('viewer'),
+		status: text('status', { enum: STORE_MEMBER_STATUSES }).notNull(),
+		joinedAt: integer('joined_at')
+			.notNull()
+			.default(sql`(strftime('%s','now'))`),
+	},
+	(table) => [primaryKey({ columns: [table.storeId, table.userId] })],
+);
 
 export const storeMemberInsertSchema = createInsertSchema(storeMembers, {
 	storeId: z.string().min(1, '매장 ID는 필수 입력 항목입니다.'),
@@ -124,23 +127,30 @@ export const storeMemberUpdateSchema = storeMemberInsertSchema.extend({
 
 export type StoreMemberUpdate = z.infer<typeof storeMemberUpdateSchema>;
 
-export const storeTables = sqliteTable('tables', {
-	storeId: text('store_id')
-		.notNull()
-		.primaryKey()
-		.references(() => stores.storeId),
-	tableId: text('table_id').notNull().primaryKey(),
-	tableCode: text('table_code').notNull(),
-	capacity: integer('capacity').notNull().default(2),
-	createdAt: integer('created_at')
-		.notNull()
-		.default(sql`(strftime('%s','now'))`),
-	updatedAt: integer('updated_at')
-		.notNull()
-		.default(sql`(strftime('%s','now'))`),
-	isActive: integer('is_active', { mode: 'boolean' }).notNull().default(false),
-	isEnabled: integer('is_enabled', { mode: 'boolean' }).notNull().default(true),
-});
+export const storeTables = sqliteTable(
+	'tables',
+	{
+		storeId: text('store_id')
+			.notNull()
+			.references(() => stores.storeId),
+		tableId: text('table_id').notNull(),
+		tableCode: text('table_code').notNull(),
+		capacity: integer('capacity').notNull().default(2),
+		createdAt: integer('created_at')
+			.notNull()
+			.default(sql`(strftime('%s','now'))`),
+		updatedAt: integer('updated_at')
+			.notNull()
+			.default(sql`(strftime('%s','now'))`),
+		isActive: integer('is_active', { mode: 'boolean' })
+			.notNull()
+			.default(false),
+		isEnabled: integer('is_enabled', { mode: 'boolean' })
+			.notNull()
+			.default(true),
+	},
+	(table) => [primaryKey({ columns: [table.storeId, table.tableId] })],
+);
 
 export const storeTableInsertSchema = createInsertSchema(storeTables, {
 	storeId: z.string().min(1, '매장 ID는 필수 입력 항목입니다.'),

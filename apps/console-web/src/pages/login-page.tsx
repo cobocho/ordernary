@@ -6,7 +6,7 @@ export function LoginPage() {
 		const { authUrl } = await trpc.user.getAuthUrl.query({
 			provider: 'google',
 			client: 'console',
-			returnTo: '/',
+			returnTo: '/store',
 		});
 
 		if (authUrl) {

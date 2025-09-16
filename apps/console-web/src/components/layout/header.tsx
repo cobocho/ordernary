@@ -6,13 +6,22 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@ordernary/design-system';
-import { CheckIcon, ChevronDown, LogOutIcon, PlusIcon } from 'lucide-react';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import {
+	CheckIcon,
+	ChevronDown,
+	LogOutIcon,
+	PlusIcon,
+	User,
+} from 'lucide-react';
 import { useState } from 'react';
+import { trpc } from '../../lib/trpc';
 
 export const Header = () => {
-	const username = 'John Doe';
-	const userPicture =
-		'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=2680&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+	const { data: profile } = useSuspenseQuery({
+		queryFn: () => trpc.user.getProfile.query(),
+		queryKey: ['user', 'profile'],
+	});
 
 	const currentStore = {
 		name: '테스트 매장',
@@ -52,20 +61,24 @@ export const Header = () => {
 		>
 			<DropdownMenuTrigger asChild>
 				<div className="flex relative hover:scale-105 w-64 cursor-pointer transition-all duration-500 gap-4 items-center bg-black/80 py-3 pl-3 pr-6 rounded-full border border-neutral-300 drop-shadow-xl backdrop-blur-lg">
-					<img
-						src={userPicture}
-						alt="User Picture"
-						className="w-14 h-14 rounded-full border border-neutral-200"
-					/>
+					<div className="w-14 h-14 rounded-full border border-neutral-200 overflow-hidden flex items-center justify-center">
+						{profile.avatarUrl ? (
+							<img
+								src={profile.avatarUrl}
+								alt="User Picture"
+								className="w-full h-full object-cover"
+							/>
+						) : (
+							<User className="w-10 h-10 object-cover text-neutral-300" />
+						)}
+					</div>
 					<div className="flex flex-col">
 						<span className="text-xs text-white">안녕하세요!</span>
 						<div className="flex items-center gap-0.5">
-							<span className="font-bold text-white">{username}</span>
+							<span className="font-bold text-white">{profile.name}</span>
 							<span className="text-neutral-200 text-sm">님!</span>
 						</div>
-						<span className="text-neutral-300 text-xs">
-							{currentStore.name}
-						</span>
+						<span className="text-neutral-300 text-xs">{profile.name}</span>
 					</div>
 					<ChevronDown className="text-neutral-300 absolute right-4" />
 				</div>

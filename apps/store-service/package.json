@@ -1,27 +1,28 @@
 {
-  "name": "@ordernary/store-service",
-  "version": "0.0.0",
-  "private": true,
-  "exports": {
-    "./types": "./src/types.ts"
-  },
-  "scripts": {
-    "dev": "wrangler dev --x-remote-bindings --config wrangler.dev.jsonc --port 4100 --inspector-port 4101",
-    "deploy": "wrangler deploy --config wrangler.jsonc",
-    "deploy:dev": "wrangler deploy --config wrangler.dev.jsonc",
-    "db:generate": "drizzle-kit generate",
-    "db:push": "drizzle-kit push --config drizzle.config.ts",
-    "db:push:dev": "drizzle-kit push --config drizzle.config.dev.ts"
-  },
-  "devDependencies": {
-    "typescript": "^5.5.2"
-  },
-  "dependencies": {
-    "drizzle-kit": "^0.31.4",
-    "drizzle-orm": "^0.44.5",
-    "drizzle-zod": "^0.8.3",
-    "nanoid": "^5.0.9",
-    "wrangler": "4.35.0",
-    "zod": "^4.1.8"
-  }
+	"name": "@ordernary/store-service",
+	"version": "0.0.0",
+	"private": true,
+	"exports": {
+		"./types": "./src/types.ts"
+	},
+	"scripts": {
+		"dev": "wrangler dev --x-remote-bindings --config wrangler.dev.jsonc --port 4100 --inspector-port 4101",
+		"deploy": "wrangler deploy --config wrangler.jsonc",
+		"deploy:dev": "wrangler deploy --config wrangler.dev.jsonc",
+		"db:generate": "drizzle-kit generate",
+		"db:migrate:dev": "drizzle-kit migrate --config drizzle.config.dev.ts",
+		"db:push": "drizzle-kit push --config drizzle.config.ts",
+		"db:push:dev": "drizzle-kit push --config drizzle.config.dev.ts"
+	},
+	"devDependencies": {
+		"typescript": "^5.5.2"
+	},
+	"dependencies": {
+		"drizzle-kit": "^0.31.4",
+		"drizzle-orm": "^0.44.5",
+		"drizzle-zod": "^0.8.3",
+		"nanoid": "^5.0.9",
+		"wrangler": "4.35.0",
+		"zod": "^4.1.8"
+	}
 }

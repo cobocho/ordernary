@@ -6,6 +6,10 @@ import { StoreListPage } from './pages/store/store-list';
 
 export const router = createBrowserRouter([
 	{
+		path: '/login',
+		element: <LoginPage />,
+	},
+	{
 		element: <Layout />,
 		children: [
 			{

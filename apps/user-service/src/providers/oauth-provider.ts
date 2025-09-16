@@ -1,6 +1,7 @@
 import { ProviderType } from '../db/schema';
 
 export interface UserInfo {
+	phone: string | null | undefined;
 	id: string;
 	name: string;
 	email: string;

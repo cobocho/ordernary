@@ -1,7 +1,8 @@
-import { publicProcedure } from '../../lib/trpc';
+import { protectedProcedure, publicProcedure } from '../../lib/trpc';
 import {
 	userGetAuthUrlRequestSchema,
 	userGetAuthUrlResponseSchema,
+	userGetProfileResponseSchema,
 } from './user.model';
 import { router } from '../../lib/trpc';
 import { Hono } from 'hono';
@@ -15,13 +16,20 @@ export const userRouter = router({
 		.input(userGetAuthUrlRequestSchema)
 		.output(userGetAuthUrlResponseSchema)
 		.query(async ({ input, ctx }) => {
-			console.log(ctx.cookies);
 			const authUrl = await ctx.env.USER_SERVICE.getAuthUrl(
 				input.provider,
 				input.client,
 				input.returnTo,
 			);
 			return { authUrl };
+		}),
+	getProfile: protectedProcedure
+		.output(userGetProfileResponseSchema)
+		.query(async ({ ctx }) => {
+			const profile = await ctx.env.USER_SERVICE.getProfile(
+				ctx.cookies.accessToken,
+			);
+			return profile;
 		}),
 });
 
@@ -39,8 +47,6 @@ callbackRouter.get('/google', async (c) => {
 	}
 
 	const result = await c.env.USER_SERVICE.handleCallback('google', code, state);
-
-	console.log(result);
 
 	setCookie(c, JwtService.accessTokenCookieName, result.auth.accessToken, {
 		path: '/',
