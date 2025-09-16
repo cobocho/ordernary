@@ -11,7 +11,7 @@ export const Layout = () => {
 			<div className="h-screen flex items-center px-6">
 				<GNB />
 			</div>
-			<div className="w-full p-8">
+			<div className="w-full px-8 py-12">
 				<Outlet />
 			</div>
 		</div>
