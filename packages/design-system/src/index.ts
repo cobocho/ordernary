@@ -5,4 +5,5 @@ export * from './components/tooltip';
 export * from './components/input';
 export * from './components/sidebar';
 export * from './components/collapsible';
+export * from './components/dropdown-menu';
 export { cn } from './lib/utils';
