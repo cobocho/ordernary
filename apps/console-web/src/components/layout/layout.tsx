@@ -1,14 +1,15 @@
 import { Outlet } from 'react-router-dom';
-import { AppSidebar } from './app-sidebar';
-import { SidebarInset, SidebarProvider } from '@ordernary/design-system';
+import { GNB } from './gnb';
 
 export const Layout = () => {
 	return (
-		<SidebarProvider>
-			<AppSidebar />
+		<div className="flex gap-4">
+			<div className="h-screen flex items-center px-6">
+				<GNB />
+			</div>
 			<div className="w-full p-8">
 				<Outlet />
 			</div>
-		</SidebarProvider>
+		</div>
 	);
 };
